@@ -3,6 +3,8 @@ import '../screens/intro_screen.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
+import '../providers/cart.dart';
+import '../screens/cart_screen.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   static const routName = '/product-detail';
@@ -15,6 +17,7 @@ class ProductDetailScreen extends StatelessWidget {
     final loadedProduct =
         Provider.of<ProductProvider>(context).findById(productId);
     final provider = Provider.of<ProductProvider>(context);
+    final cart = Provider.of<Cart>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -26,14 +29,19 @@ class ProductDetailScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: GestureDetector(
-              onTap: () {},
-              child: const CircleAvatar(
+              onTap: () {
+                Navigator.pushNamed(context, CartScreen.routeName);
+              },
+              child: CircleAvatar(
                 backgroundColor: Colors.pink,
                 radius: 20,
-                child: badges.Badge(
-                  badgeContent: Text('3'),
-                  badgeStyle: badges.BadgeStyle(badgeColor: Colors.white),
-                  child: Icon(Icons.shopping_cart),
+                child: Consumer<Cart>(
+                  builder: (context, value, child) => badges.Badge(
+                    badgeContent: Text(value.ItemCount.toString()),
+                    badgeStyle:
+                        const badges.BadgeStyle(badgeColor: Colors.white),
+                    child: const Icon(Icons.shopping_cart),
+                  ),
                 ),
               ),
             ),
@@ -120,7 +128,12 @@ class ProductDetailScreen extends StatelessWidget {
                 '\$ ${loadedProduct.amount.toString()}',
                 style: const TextStyle(fontSize: 30),
               ),
-              ElevatedButton(onPressed: () {}, child: const Text('Add tocart'))
+              ElevatedButton(
+                  onPressed: () {
+                    cart.addItem(loadedProduct.id, loadedProduct.amount,
+                        loadedProduct.title);
+                  },
+                  child: const Text('Add tocart'))
             ],
           )
         ],

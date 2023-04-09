@@ -8,16 +8,24 @@ class RecommendedWidget extends StatelessWidget {
   final String title;
   final double amount;
   final String id;
+  final Color color;
 
   const RecommendedWidget(
       {super.key,
       required this.image,
       required this.title,
       required this.amount,
-      required this.id});
+      required this.id,
+      required this.color});
 
   @override
   Widget build(BuildContext context) {
+    List<Color> bgColors = [
+      Colors.green,
+      Colors.purple,
+      Colors.cyan,
+      Colors.yellow
+    ];
     return SingleChildScrollView(
       child: GestureDetector(
         onTap: () {
@@ -28,9 +36,9 @@ class RecommendedWidget extends StatelessWidget {
           elevation: 2,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          color: Colors.blue.withOpacity(.2),
+          color: color,
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(18.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
